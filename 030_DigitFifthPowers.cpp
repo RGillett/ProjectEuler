@@ -1,8 +1,9 @@
 /*******************************************************************************
-* Driver
+* Digit Fifth Powers
+* Author: Ryan Gillett
 *******************************************************************************/
 #include <iostream>
-#include "primes.h"
+#include <math.h>
 
 using namespace std;
 
@@ -11,19 +12,23 @@ using namespace std;
 *******************************************************************************/
 int main()
 {
-	for (long long i = 2; i <= 100; i++)
+	int finalSum = 0;
+	for (int i = 2; i < 1000000; i++)
 	{
-		vector<int> factors = factorize(i);
-		cout << i << ": " << endl;
-		for (int j = 0; j < factors.size(); j++)
+		int sum = 0;
+		int number = i;
+		while (number > 0)
 		{
-			cout << factors[j] << endl;
+			sum += pow(number%10,5);
+			number /= 10;
 		}
-		cout << endl;
+		if (sum == i)
+		{
+			finalSum += i;
+		}
 	}
-	long long prime = 1001;
-	previousPrime(prime);
-	cout << prime << endl;
+
+	cout << finalSum << endl;
 
 	return 0;
 }

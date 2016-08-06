@@ -3,7 +3,8 @@
 * Author: Ryan Gillett
 *******************************************************************************/
 #include <iostream>
-#include "BigInt.h"
+#include <math.h>
+#include "primes.h"
 
 using namespace std;
 
@@ -12,15 +13,34 @@ using namespace std;
 *******************************************************************************/
 int main()
 {
+	vector<vector<int> > uniqueValues;
 	for (int a = 2; a <= 100; a++)
 	{
-		BigInt product(a);
+		vector<int> factors = factorize(a);
 		for (int b = 2; b <= 100; b++)
 		{
-			product *= a;
-			cout << a << "^" << b << " = " << product << endl;
+			vector<int> multiples;
+			for (int i = 0; i < factors.size(); i++)
+			{
+				multiples.push_back(factors[i] * b);
+			}
+			bool unique = true;
+			for (int i = 0; i < uniqueValues.size(); i++)
+			{
+				if (multiples == uniqueValues[i])
+				{
+					unique = false;
+					i = uniqueValues.size();
+				}
+			}
+			if (unique)
+			{
+				uniqueValues.push_back(multiples);
+			}
 		}
 	}
+
+	cout << uniqueValues.size();
 
 	return 0;
 }

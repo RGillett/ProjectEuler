@@ -4,9 +4,7 @@
 #ifndef PRIMES
 #define PRIMES
 
-static const int SIEVE_MAX = 100000;
-static bool sieve[SIEVE_MAX];
-static bool initialized = false;
+#include <vector>
 
 /*******************************************************************************
 * sieveOfEratosthenes()
@@ -39,6 +37,10 @@ void sieveOfEratosthenes(bool* sieve, const int& size)
 *******************************************************************************/
 bool isPrime(const unsigned long long int& number)
 {
+	static const int SIEVE_MAX = 100000;
+	static bool sieve[SIEVE_MAX];
+	static bool initialized = false;
+
 	if (!initialized)
 	{
 		sieveOfEratosthenes(sieve, SIEVE_MAX);
@@ -70,7 +72,7 @@ bool isPrime(const unsigned long long int& number)
 * nextPrime()
 * Takes an int and returns the closest consecutive prime
 *******************************************************************************/
-void nextPrime(unsigned long long int& number)
+void nextPrime(long long int& number)
 {
 	while (!isPrime(++number))
 		;
@@ -82,9 +84,9 @@ void nextPrime(unsigned long long int& number)
 * previousPrime()
 * Takes an int and returns the previous consecutive prime
 *******************************************************************************/
-void previousPrime(unsigned long long int& number)
+void previousPrime(long long int& number)
 {
-	while (!isPrime(--number))
+	while (number > 2 && !isPrime(--number))
 		;
 		
 	return;
@@ -93,15 +95,22 @@ void previousPrime(unsigned long long int& number)
 /*******************************************************************************
 * factorize()
 *******************************************************************************/
-int* factorize()
+std::vector<int> factorize(long long int number)
 {
-	if (!initialized)
+	std::vector<int> factors;
+
+	for (long long int i = 2; number > 1; nextPrime(i))
 	{
-		sieveOfEratosthenes(sieve, SIEVE_MAX);
-		initialized = true;
+		int count = 0;
+		while (number % i == 0)
+		{
+			count++;
+			number /= i;
+		}
+		factors.push_back(count);
 	}
 
-	return 1;
+	return factors;
 }
 
 /*******************************************************************************

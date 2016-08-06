@@ -4,6 +4,7 @@
 * Author:
 *    Ryan Gillett
 ******************************************************************************/
+#include <iostream>
 #include <cstdlib>
 #include "BigInt.h"
 
@@ -14,6 +15,9 @@ using namespace std;
 ******************************************************************************/
 int main(int argc, char** argv)
 {
+	clock_t t1,t2;
+    t1=clock();
+
 	int num;
 	if (argc < 2)
 	{
@@ -35,6 +39,10 @@ int main(int argc, char** argv)
 	}
 
 	cout << c << endl;
+
+	t2=clock();
+    float diff ((float)t2-(float)t1);
+    cout<<endl<<diff<<endl;
 
 	return 0;
 }

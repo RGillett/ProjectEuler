@@ -4,9 +4,13 @@
 #ifndef PRIMES
 #define PRIMES
 
+static const int SIEVE_MAX = 100000;
+static bool sieve[SIEVE_MAX];
+static bool initialized = false;
+
 /*******************************************************************************
 * sieveOfEratosthenes()
-* Sets an array of booleans to true for prime indexes for quick prime checking.
+* Sets an array of booleans to true for prime indexes for quick prime checking
 *******************************************************************************/
 void sieveOfEratosthenes(bool* sieve, const int& size)
 {
@@ -35,10 +39,6 @@ void sieveOfEratosthenes(bool* sieve, const int& size)
 *******************************************************************************/
 bool isPrime(const unsigned long long int& number)
 {
-	const int SIEVE_MAX = 100000;
-	static bool sieve[SIEVE_MAX];
-	static bool initialized = false;
-
 	if (!initialized)
 	{
 		sieveOfEratosthenes(sieve, SIEVE_MAX);
@@ -70,7 +70,7 @@ bool isPrime(const unsigned long long int& number)
 * nextPrime()
 * Takes an int and returns the closest consecutive prime
 *******************************************************************************/
-void nextPrime(long long int& number)
+void nextPrime(unsigned long long int& number)
 {
 	while (!isPrime(++number))
 		;
@@ -78,4 +78,59 @@ void nextPrime(long long int& number)
 	return;
 }
 
-#endif
+/*******************************************************************************
+* previousPrime()
+* Takes an int and returns the previous consecutive prime
+*******************************************************************************/
+void previousPrime(unsigned long long int& number)
+{
+	while (!isPrime(--number))
+		;
+		
+	return;
+}
+
+/*******************************************************************************
+* factorize()
+*******************************************************************************/
+int* factorize()
+{
+	if (!initialized)
+	{
+		sieveOfEratosthenes(sieve, SIEVE_MAX);
+		initialized = true;
+	}
+
+	return 1;
+}
+
+/*******************************************************************************
+* countFactors()
+*******************************************************************************/
+long long int countPrimeFactors(long long int value)
+{
+	long long int primeFactor = 0;
+	
+	int factors = 1;
+	
+	while (value > 1)
+	{
+		int factorCounter = 1;
+		
+		nextPrime(primeFactor);
+			
+		while (value % primeFactor == 0)
+		{
+			value /= primeFactor;
+			factorCounter++;
+		}
+		
+		factors *= factorCounter;
+	}
+	
+	return factors;
+}
+
+
+
+#endif // PRIMES

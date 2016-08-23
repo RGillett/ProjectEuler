@@ -37,7 +37,7 @@ void sieveOfEratosthenes(bool* sieve, const int& size)
 *******************************************************************************/
 bool isPrime(const unsigned long long int& number)
 {
-	static const int SIEVE_MAX = 100000;
+	static const int SIEVE_MAX = 1000000;
 	static bool sieve[SIEVE_MAX];
 	static bool initialized = false;
 

@@ -23,7 +23,7 @@ void sieveOfEratosthenes(bool* sieve, const int& size)
 	{
 		if (sieve[i] == true)
 		{
-			for (int j = i + i; j < size; j += i)
+			for (int j = i * i; j < size; j += i)
 			{
 				sieve[j] = false;
 			}
@@ -117,16 +117,12 @@ std::vector<int> factorize(long long int number)
 * countFactors()
 *******************************************************************************/
 long long int countPrimeFactors(long long int value)
-{
-	long long int primeFactor = 0;
-	
+{	
 	int factors = 1;
 	
-	while (value > 1)
+	for (long long int primeFactor = 2; value > 1; nextPrime(primeFactor))
 	{
 		int factorCounter = 1;
-		
-		nextPrime(primeFactor);
 			
 		while (value % primeFactor == 0)
 		{

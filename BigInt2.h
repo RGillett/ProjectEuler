@@ -38,9 +38,9 @@ public:
 	BigInt(string value);
 	BigInt(long long value);
 	BigInt(const BigInt &intToCopy);
-	BigInt& operator =  (const BigInt &rightSide);
-	BigInt& operator =  (long long rightSide);
-	BigInt& operator =  (string rightSide);
+	BigInt& operator = (const BigInt &rightSide);
+	BigInt& operator = (long long rightSide);
+	BigInt& operator = (string rightSide);
 	template <typename T> BigInt& operator += (const T& rightSide);
 	template <typename T> BigInt& operator -= (const T& rightSide);
 	template <typename T> BigInt& operator *= (const T& rightSide);
@@ -72,7 +72,7 @@ public:
 	friend bool operator == (const BigInt& leftSide, const BigInt& rightSide);
 	friend bool operator != (const BigInt& leftSide, const BigInt& rightSide);
 };
- 
+
 /******************************************************************************
 * BigInt: Default Constructor
 *	Initializes integer to 0
@@ -99,7 +99,7 @@ BigInt::BigInt(long long value)
 {
 	*this = value;
 }
- 
+
 /******************************************************************************
 * BigInt: Copy Constructor
 ******************************************************************************/
@@ -107,7 +107,7 @@ BigInt::BigInt(const BigInt &intToCopy)
 {
 	*this = intToCopy;
 }
- 
+
 /******************************************************************************
 * BigInt: = (BigInt)
 ******************************************************************************/

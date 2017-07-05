@@ -49,17 +49,17 @@ bool isPrime(const unsigned long long int& number)
 
 	if (number >= SIEVE_MAX)
 	{
-		if (!(number % 2 == 0 || number % 3 == 0))
+		if (!(number % 2 == 0 || number % 3 == 0 || number < 2))
 		{
 			for (unsigned long long int i = 5; i*i <= number; i += 6)
 			{
 				if (number % i == 0 || number % (i + 2) == 0)
 					return false;
 			}
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 	else
@@ -76,7 +76,7 @@ void nextPrime(long long int& number)
 {
 	while (!isPrime(++number))
 		;
-		
+
 	return;
 }
 
@@ -88,8 +88,24 @@ void previousPrime(long long int& number)
 {
 	while (number > 2 && !isPrime(--number))
 		;
-		
+
 	return;
+}
+
+/*******************************************************************************
+* getPrime()
+* Takes an integer n and returns the nth prime number
+*******************************************************************************/
+long long int getPrime(int n)
+{
+	long long int prime = 0;
+
+	for (int i = 0; i < n; ++i)
+	{
+		nextPrime(prime);
+	}
+
+	return prime;
 }
 
 /*******************************************************************************
@@ -114,26 +130,22 @@ std::vector<int> factorize(long long int number)
 }
 
 /*******************************************************************************
-* countFactors()
+* countPrimeFactors()
 *******************************************************************************/
-long long int countPrimeFactors(long long int value)
-{	
-	int factors = 1;
-	
-	for (long long int primeFactor = 2; value > 1; nextPrime(primeFactor))
+long long int countPrimeFactors(long long int number)
+{
+	int primeFactorsCount = 0;
+
+	for (long long int primeFactor = 2; number > 1; nextPrime(primeFactor))
 	{
-		int factorCounter = 1;
-			
-		while (value % primeFactor == 0)
+		while (number % primeFactor == 0)
 		{
-			value /= primeFactor;
-			factorCounter++;
+			number /= primeFactor;
+			primeFactorsCount++;
 		}
-		
-		factors *= factorCounter;
 	}
-	
-	return factors;
+
+	return primeFactorsCount;
 }
 
 

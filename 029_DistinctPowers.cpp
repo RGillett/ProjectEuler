@@ -3,7 +3,6 @@
 * Author: Ryan Gillett
 *******************************************************************************/
 #include <iostream>
-#include <math.h>
 #include <set>
 #include "primes.h"
 

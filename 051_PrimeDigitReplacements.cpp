@@ -3,7 +3,6 @@
 * Author: Ryan Gillett
 *******************************************************************************/
 #include <iostream>
-#include <math.h>
 #include "primes.h"
 
 using namespace std;
@@ -13,26 +12,27 @@ using namespace std;
 ******************************************************************************/
 int main()
 {
-	// This is an O(n^9) algorithm, but it's still fast because n will never
-	// be larger than 11 to solve this problem ;)
-	for (int a = 0; a <= 10; ++a)
+	// This is an O(n^9) algorithm, but it's still fast because n will never be larger than 11 to solve this problem ;)
+	for (int a = -1; a < 10; ++a)
 	{
-		for (int b = 0; b <= 10; ++b)
+		for (int b = -1; b < 10; ++b)
 		{
-			for (int c = 0; c <= 10; ++c)
+			for (int c = -1; c < 10; ++c)
 			{
-				for (int d = 0; d <= 10; ++d)
+				for (int d = -1; d < 10; ++d)
 				{
-					for (int e = 0; e <= 10; ++e)
+					for (int e = -1; e < 10; ++e)
 					{
-						for (int f = 0; f <= 10; ++f)
+						for (int f = -1; f < 10; f+=2)
 						{
+							// Pointers to our digits for DRYer code
 							int* digits[6] = {&a,&b,&c,&d,&e,&f};
 
+							// Using -1 as a flag for a wildcard, count how big our wildcard array needs to be
 							int wildcardCount = 0;
 							for (int n = 0; n < 6; ++n)
 							{
-								if (*digits[n] == 10)
+								if (*digits[n] == -1)
 								{
 									wildcardCount++;
 								}
@@ -40,6 +40,7 @@ int main()
 
 							if (wildcardCount > 0)
 							{
+								// Create an array of pointers to our wildcard digits for mindless replacement of digits
 								int* wildcards[wildcardCount];
 								for (int i = 0; i < wildcardCount; ++i)
 								{
@@ -48,7 +49,7 @@ int main()
 
 								for (int n = 0; n < 6; ++n)
 								{
-									if (*digits[n] == 10)
+									if (*digits[n] == -1)
 									{
 										bool found = false;
 										for (int k = 0; !found; ++k)
@@ -62,6 +63,7 @@ int main()
 									}
 								}
 
+								// Replace the wildcards with each digit and count the number of resulting primes
 								int primeCount = 0;
 								int firstPrime = -1;
 								for (int digit = 0; digit < 10; ++digit)
@@ -81,6 +83,7 @@ int main()
 									}
 								}
 
+								// Print when we've found a possible answer
 								if (primeCount == 8)
 								{
 									for (int i = 0; i < wildcardCount; ++i)
@@ -90,9 +93,10 @@ int main()
 									cout << a << b << c << d << e << f << endl;
 								}
 
+								// Reset the wildcard flags as to not interfere with our loops
 								for (int i = 0; i < wildcardCount; ++i)
 								{
-									*wildcards[i] = 10;
+									*wildcards[i] = -1;
 								}
 							}
 						}

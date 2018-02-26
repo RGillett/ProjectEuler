@@ -57,7 +57,7 @@ private:
     }
 
 public:
-    int dijkstra80x80(const int Q[][80],const int &START_X, const int &START_Y, const int &GOAL_X, const int &GOAL_Y, const bool &LEFT, const bool &UP, const bool &RIGHT, const bool &DOWN)
+    int dijkstra80x80(const int Q[][80], const int &START_X, const int &START_Y, const int &GOAL_X, const int &GOAL_Y, const bool &LEFT, const bool &UP, const bool &RIGHT, const bool &DOWN)
     {
         std::priority_queue<Coordinates, std::vector<Coordinates>, LessThan> open;
         bool visited[80][80];
@@ -83,36 +83,25 @@ public:
             open.pop();
             visited[currentNode.x][currentNode.y] = true;
 
-            if (LEFT && !visited[currentNode.x][currentNode.y-1] && currentNode.y > 0)
+            Coordinates neighbors[4] =
             {
-                if(distanceSums[currentNode.x][currentNode.y-1] > Q[currentNode.x][currentNode.y-1] + distanceSums[currentNode.x][currentNode.y])
-                {
-                    distanceSums[currentNode.x][currentNode.y-1] = Q[currentNode.x][currentNode.y-1] + distanceSums[currentNode.x][currentNode.y];
-                    open.push(Coordinates(currentNode.x, currentNode.y-1, &distanceSums[currentNode.x][currentNode.y-1]));
-                }
-            }
-            if (UP && !visited[currentNode.x-1][currentNode.y] && currentNode.x > 0)
+                Coordinates(currentNode.x, currentNode.y-1, &distanceSums[currentNode.x][currentNode.y-1]),
+                Coordinates(currentNode.x-1, currentNode.y, &distanceSums[currentNode.x-1][currentNode.y]),
+                Coordinates(currentNode.x, currentNode.y+1, &distanceSums[currentNode.x][currentNode.y+1]),
+                Coordinates(currentNode.x+1, currentNode.y, &distanceSums[currentNode.x+1][currentNode.y])
+            };
+            bool allowedEdges[4] = {LEFT,UP,RIGHT,DOWN};
+            bool coordinatesWithinBounds[4] = {currentNode.y > 0, currentNode.x > 0, currentNode.y < 79, currentNode.x < 79};
+
+            for (int i = 0; i < 4; i++)
             {
-                if(distanceSums[currentNode.x-1][currentNode.y] > Q[currentNode.x-1][currentNode.y] + distanceSums[currentNode.x][currentNode.y])
+                if (allowedEdges[i] && !visited[neighbors[i].x][neighbors[i].y] && coordinatesWithinBounds[i])
                 {
-                    distanceSums[currentNode.x-1][currentNode.y] = Q[currentNode.x-1][currentNode.y] + distanceSums[currentNode.x][currentNode.y];
-                    open.push(Coordinates(currentNode.x-1, currentNode.y, &distanceSums[currentNode.x-1][currentNode.y]));
-                }
-            }
-            if (RIGHT && !visited[currentNode.x][currentNode.y+1] && currentNode.y < 79)
-            {
-                if(distanceSums[currentNode.x][currentNode.y+1] > Q[currentNode.x][currentNode.y+1] + distanceSums[currentNode.x][currentNode.y])
-                {
-                    distanceSums[currentNode.x][currentNode.y+1] = Q[currentNode.x][currentNode.y+1] + distanceSums[currentNode.x][currentNode.y];
-                    open.push(Coordinates(currentNode.x, currentNode.y+1, &distanceSums[currentNode.x][currentNode.y+1]));
-                }
-            }
-            if (DOWN && !visited[currentNode.x+1][currentNode.y] && currentNode.x < 79)
-            {
-                if(distanceSums[currentNode.x+1][currentNode.y] > Q[currentNode.x+1][currentNode.y] + distanceSums[currentNode.x][currentNode.y])
-                {
-                    distanceSums[currentNode.x+1][currentNode.y] = Q[currentNode.x+1][currentNode.y] + distanceSums[currentNode.x][currentNode.y];
-                    open.push(Coordinates(currentNode.x+1, currentNode.y, &distanceSums[currentNode.x+1][currentNode.y]));
+                    if (*neighbors[i].location > Q[neighbors[i].x][neighbors[i].y] + *currentNode.location)
+                    {
+                        *neighbors[i].location = Q[neighbors[i].x][neighbors[i].y] + *currentNode.location;
+                        open.push(neighbors[i]);
+                    }
                 }
             }
         }

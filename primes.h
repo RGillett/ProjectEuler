@@ -37,7 +37,7 @@ void sieveOfEratosthenes(bool* sieve, const int& size)
 *******************************************************************************/
 bool isPrime(const unsigned long long int& number)
 {
-	static const int SIEVE_MAX = 1000000;
+	static const int SIEVE_MAX = 10000000;
 	static bool sieve[SIEVE_MAX];
 	static bool initialized = false;
 
@@ -162,6 +162,28 @@ long long int countPrimeFactors(long long int number)
 	return primeFactorsCount;
 }
 
+/*******************************************************************************
+* totient()
+*******************************************************************************/
+long long int totient(long long int number)
+{
+	long long int coprimeCount = number-1;
+	for (long long int i = 2; number > 1; nextPrime(i))
+	{
+		if (number % i == 0)
+		{
+			do
+			{
+				number /= i;
+			}
+			while (number % i == 0);
+
+			coprimeCount -= (coprimeCount / i) + (coprimeCount % i != 0);
+		}
+	}
+
+	return coprimeCount + 1;
+}
 
 
 #endif // PRIMES

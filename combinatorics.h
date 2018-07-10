@@ -47,6 +47,37 @@ long long int choose(int n, int r)
 	}
 }
 
+/*******************************************************************************
+* isPermutation()
+*******************************************************************************/
+bool isPermutation(long long int firstNumber, long long int secondNumber)
+{
+	int digitCounts[10] = {0};
+
+	while (firstNumber > 0 && secondNumber > 0)
+	{
+		digitCounts[firstNumber%10]++;
+		digitCounts[secondNumber%10]--;
+		firstNumber /= 10;
+		secondNumber /= 10;
+	}
+
+	if (firstNumber > 0 || secondNumber > 0)
+	{
+		return false;
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		if (digitCounts[i] != 0)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 
 
 #endif // COMBINATORICS

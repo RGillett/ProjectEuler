@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Coded Triangle NUmbers
+* Coded Triangle Numbers
 * Author: Ryan Gillett
 *******************************************************************************/
 #include <iostream>
@@ -20,7 +20,7 @@ int main()
 	char filename[] = "p042_words.txt";
 	char input[50];
 	int triangleCount = 0;
-	
+
 	ifstream fin;
 	fin.open(filename);
 	if (fin.fail())
@@ -29,7 +29,7 @@ int main()
 		fin.close();
 		return false;
 	}
-	
+
 	while(!fin.eof())
 	{
 		fin.getline(input, 50, ',');
@@ -40,11 +40,11 @@ int main()
 			triangleCount++;
 		}
 	}
-	
+
 	fin.close();
 
 	cout << triangleCount << endl;
-	
+
 	return 0;
 }
 

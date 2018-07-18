@@ -47,8 +47,8 @@ public:
 	template <typename T> BigInt& operator /= (const T& rightSide); //TODO
 	template <typename T> BigInt& operator %= (const T& rightSide); //TODO
 	template <typename T> BigInt& operator ^= (const T& rightSide); //TODO
-	BigInt& operator ++ (); //TODO
-	BigInt& operator ++ (int postfix); //TODO
+	BigInt& operator ++ ();
+	BigInt operator ++ (int postfix);
 	BigInt& operator -- (); //TODO
 	BigInt& operator -- (int postfix); //TODO
 	friend BigInt operator + (const BigInt& leftSide, const BigInt& rightSide);
@@ -71,6 +71,9 @@ public:
 	friend bool operator >= (const BigInt& leftSide, const BigInt& rightSide);
 	friend bool operator == (const BigInt& leftSide, const BigInt& rightSide);
 	friend bool operator != (const BigInt& leftSide, const BigInt& rightSide);
+
+    BigInt& reverseNumber();
+    bool isPalindrome();
 };
 
 /******************************************************************************
@@ -150,6 +153,24 @@ template <typename T> BigInt& BigInt::operator += (const T &rightSide)
 template <typename T> BigInt& BigInt::operator *= (const T &rightSide)
 {
 	return *this = *this * rightSide;
+}
+
+/******************************************************************************
+* BigInt: ++ [prefix]
+******************************************************************************/
+BigInt& BigInt::operator ++ ()
+{
+	return *this = *this + 1;
+}
+
+/******************************************************************************
+* BigInt: ++ [postfix]
+******************************************************************************/
+BigInt BigInt::operator ++ (int postfix)
+{
+    BigInt thisToReturn(*this);
+    ++*this;
+	return thisToReturn;
 }
 
 /******************************************************************************
@@ -329,4 +350,23 @@ ostream& operator << (ostream& out, const BigInt& displayInt)
 	}
 
 	return out;
+}
+
+/******************************************************************************
+* BigInt: reverseNumber ()
+******************************************************************************/
+BigInt& BigInt::reverseNumber()
+{
+	reverse(integer.begin(), integer.end());
+	return *this;
+}
+
+/******************************************************************************
+* BigInt: isPalindrome ()
+******************************************************************************/
+bool BigInt::isPalindrome()
+{
+    BigInt reversed = *this;
+    reversed.reverseNumber();
+	return *this == reversed;
 }

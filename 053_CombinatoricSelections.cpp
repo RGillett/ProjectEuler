@@ -18,19 +18,13 @@ using namespace std;
 ******************************************************************************/
 int main()
 {
-	// cout << partialFactorial(70, 5) << endl;
 	int overAMillionCount = 0;
-	for (int n = 23; n <= 50; n++)
+	for (int n = 23; n <= 100; n++)
 	{
-		for (int r = 4; r <= n/2; r++)
-		{
-			cout << choose(n, r) << endl;
-			// if (choose(n, r) > 1000000)
-			// {
-			// 	overAMillionCount += 2 * (n - r + 1);
-			// }
-		}
-		cout << endl;
+        int r = 3;
+		while (choose(n, ++r) <= 1000000)
+            ;
+        overAMillionCount += 2 * (n/2 - (r - 1)) - (n%2 == 0);
 	}
 
 	cout << overAMillionCount << endl;

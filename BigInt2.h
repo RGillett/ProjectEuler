@@ -8,10 +8,6 @@
 
 using namespace std;
 
-#ifdef DEBUG
-#include <cassert>
-#endif
-
 // If string library doesn't provide to_string, implement my own
 #ifndef to_string
 #include <sstream>
@@ -42,7 +38,7 @@ public:
 	BigInt& operator = (long long rightSide);
 	BigInt& operator = (string rightSide);
 	template <typename T> BigInt& operator += (const T& rightSide);
-	template <typename T> BigInt& operator -= (const T& rightSide);
+	template <typename T> BigInt& operator -= (const T& rightSide); //TODO
 	template <typename T> BigInt& operator *= (const T& rightSide);
 	template <typename T> BigInt& operator /= (const T& rightSide); //TODO
 	template <typename T> BigInt& operator %= (const T& rightSide); //TODO
@@ -53,16 +49,16 @@ public:
 	BigInt& operator -- (int postfix); //TODO
 	friend BigInt operator + (const BigInt& leftSide, const BigInt& rightSide);
 	template <typename T> friend BigInt operator + (const T& leftSide, const T& rightSide);
-	friend BigInt operator - (const BigInt& leftSide, const BigInt& rightSide);
-	template <typename T> friend BigInt operator - (const T& leftSide, const T& rightSide);
-	friend BigInt operator * (const BigInt& leftSide, const BigInt& rightSide); //TODO
+	friend BigInt operator - (const BigInt& leftSide, const BigInt& rightSide); //TODO
+	template <typename T> friend BigInt operator - (const T& leftSide, const T& rightSide); //TODO
+	friend BigInt operator * (const BigInt& leftSide, const BigInt& rightSide);
 	template <typename T> friend BigInt operator * (const T& leftSide, const T& rightSide);
 	friend BigInt operator / (const BigInt& leftSide, const BigInt& rightSide); //TODO
 	template <typename T> friend BigInt operator / (const T& leftSide, const T& rightSide); //TODO
 	friend BigInt operator % (const BigInt& leftSide, const BigInt& rightSide); //TODO
 	template <typename T> friend BigInt operator % (const T& leftSide, const T& rightSide); //TODO
-	friend BigInt operator ^ (const BigInt& leftSide, const BigInt& rightSide); //TODO
-	template <typename T> friend BigInt operator ^ (const T& leftSide, const T& rightSide); //TODO
+	friend BigInt operator ^ (const BigInt& leftSide, const BigInt& rightSide);
+	template <typename T> friend BigInt operator ^ (const T& leftSide, const T& rightSide);
 	friend ostream& operator << (ostream& out, const BigInt& displayInt);
 	friend istream& operator >> (istream& in, const BigInt& inputInt); //TODO
 	friend bool operator <  (const BigInt& leftSide, const BigInt& rightSide);
@@ -74,6 +70,7 @@ public:
 
     BigInt& reverseNumber();
     bool isPalindrome();
+    BigInt digitSum();
 };
 
 /******************************************************************************
@@ -232,18 +229,9 @@ template <typename T> BigInt operator + (const T& leftSide, const T& rightSide)
 ******************************************************************************/
 BigInt operator * (const BigInt& leftSide, const BigInt& rightSide)
 {
-	long long n = 0;
-	for (int i = rightSide.integer.size() - 1; i >= 0; --i)
-	{
-		for (int j = 0; j < pow(10, i); ++j)
-		{
-			n += (rightSide.integer[i] - '0');
-		}
-	}
+	BigInt returnInt(0);
 
-	BigInt returnInt(leftSide);
-
-	for (long long i = 1; i < n; ++i)
+	for (BigInt i = 0; i < rightSide; ++i)
 	{
 		returnInt += leftSide;
 	}
@@ -256,7 +244,30 @@ BigInt operator * (const BigInt& leftSide, const BigInt& rightSide)
 ******************************************************************************/
 template <typename T> BigInt operator * (const T& leftSide, const T& rightSide)
 {
-	return BigInt(leftSide) + BigInt(rightSide);
+	return BigInt(leftSide) * BigInt(rightSide);
+}
+
+/******************************************************************************
+* BigInt: ^
+******************************************************************************/
+BigInt operator ^ (const BigInt& leftSide, const BigInt& rightSide)
+{
+    BigInt returnInt(leftSide);
+
+	for (BigInt i = 1; i < rightSide; ++i)
+	{
+		returnInt *= leftSide;
+	}
+
+	return returnInt;
+}
+
+/******************************************************************************
+* BigInt: ^
+******************************************************************************/
+template <typename T> BigInt operator ^ (const T& leftSide, const T& rightSide)
+{
+    return BigInt(leftSide) ^ BigInt(rightSide);
 }
 
 /******************************************************************************
@@ -369,4 +380,18 @@ bool BigInt::isPalindrome()
     BigInt reversed = *this;
     reversed.reverseNumber();
 	return *this == reversed;
+}
+
+/******************************************************************************
+* BigInt: digitSum ()
+******************************************************************************/
+BigInt BigInt::digitSum()
+{
+    BigInt sum;
+    for(std::string::iterator it = integer.begin(); it != integer.end(); ++it)
+    {
+        sum += *it - '0';
+    }
+
+	return sum;
 }

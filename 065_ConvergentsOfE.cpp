@@ -1,119 +1,54 @@
 /******************************************************************************
-* Program:
-*    Convergents Of E
-* Author:
-*    Ryan Gillett
+* Convergents Of E
+* Author: Ryan Gillett
 ******************************************************************************/
 #include <iostream>
-#include <math.h>
+#include "primes.h"
+#include "BigInt2.h"
 
 using namespace std;
 
-//Prototypes
-int calculateENumber(const int& n);
-void reduceFraction(unsigned long long int& numerator, unsigned long long int& denominator);
-void nextPrime(unsigned long long int &value);
-bool isPrime(unsigned long long int checkValue);
-int addDigits(int value);
- 
+struct fraction
+{
+	BigInt numerator;
+	BigInt denominator;
+};
+
+fraction findFractionalApproximationofE(int,int);
+int getConvergentDivisor(int);
+
 /******************************************************************************
 * Main
 ******************************************************************************/
 int main()
 {
-	const int TARGET = 30;
-	
-	unsigned long long int numerator = 1;
-	unsigned long long int denominator = calculateENumber(TARGET);
-	
-	for (int i = TARGET - 1; i > 1; i--)
-	{
-		numerator += denominator * calculateENumber(i);
-		cerr << "e number: " << calculateENumber(i) << endl;
-		int swap = numerator;
-		numerator = denominator;
-		denominator = swap;
-		reduceFraction(numerator, denominator);
-		cerr << numerator << "/" << denominator << endl;
-	}
-	
-	numerator += denominator * 2;
-	
-	cerr << numerator << "/" << denominator << endl;
-	
-	cout << addDigits(numerator) << endl;
-	
+	fraction eApproximation = findFractionalApproximationofE(0,100);
+	cout << eApproximation.numerator.digitSum() << endl;
+
 	return 0;
 }
 
-int calculateENumber(const int& n)
+fraction findFractionalApproximationofE(int i, int numberOfConvergents)
 {
-	if (n % 3 == 0)
+	if (i == numberOfConvergents-1)
 	{
-		return (n + 1) * 2 / 3;
+		fraction fraction;
+		fraction.numerator = getConvergentDivisor(i);
+		fraction.denominator = 1;
+		return fraction;
 	}
 	else
 	{
-		return 1;
+		fraction fraction = findFractionalApproximationofE(i+1, numberOfConvergents);
+		BigInt temp = fraction.denominator;
+		fraction.denominator = fraction.numerator;
+		fraction.numerator = temp;
+		fraction.numerator += getConvergentDivisor(i) * fraction.denominator;
+		return fraction;
 	}
 }
 
-void reduceFraction(unsigned long long int& numerator, unsigned long long int& denominator)
-{cout << "A" << endl;
-	unsigned long long int rootNumerator = sqrt(numerator);
-	unsigned long long int rootDenominator = sqrt(denominator);
-	
-	for (unsigned long long int i = 2; i < rootNumerator && i < rootDenominator; i++)
-	{cout << "i: " << i << " numerator: " << numerator << " denominator: " << denominator << "\n";
-		while (numerator % i == 0 && denominator % i == 0)
-		{cout << "C" << endl;
-			numerator /= i;
-			denominator /= i;
-		}
-	}
-}
-
-void nextPrime(unsigned long long int &value)
+int getConvergentDivisor(int n)
 {
-	while (!isPrime(++value))
-			;
+	return (n % 3 != 2 ? (n == 0 ? 2 : 1) : (((n/3)+1)*2));
 }
-
-bool isPrime(unsigned long long int checkValue)
-{
-	if (checkValue < 2)
-		return false;
-		
-	if (checkValue % 2 == 0)
-	{
-		if (checkValue == 2)
-		{
-			return true;
-		}
-		return false;
-	}
-		
-	long long int maxValue = sqrt(checkValue);
-		
-	for (long long int i = 3; i <= maxValue; i += 2)
-	{
-		if (checkValue % i == 0)
-			return false;
-	}
-	
-	return true;
-}
-
-int addDigits(int value)
-{
-	int sum = 0;
-	
-	while (value > 0)
-	{
-		sum += value % 10;
-		value /= 10;
-	}
-	
-	return sum;
-}
-

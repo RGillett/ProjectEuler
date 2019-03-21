@@ -8,17 +8,6 @@
 
 using namespace std;
 
-// If string library doesn't provide to_string, implement my own
-#ifndef to_string
-#include <sstream>
-string to_string(long long i)
-{
-    stringstream ss;
-    ss << i;
-    return ss.str();
-}
-#endif
-
 /******************************************************************************
 * Class: BigInt
 *	Represents an arbitrarily large integer
@@ -230,10 +219,12 @@ template <typename T> BigInt operator + (const T& leftSide, const T& rightSide)
 BigInt operator * (const BigInt& leftSide, const BigInt& rightSide)
 {
 	BigInt returnInt(0);
+	const BigInt* counter = (rightSide < leftSide ? &rightSide : &leftSide);
+	const BigInt* adder   = (rightSide > leftSide ? &rightSide : &leftSide);
 
-	for (BigInt i = 0; i < rightSide; ++i)
+	for (BigInt i = 0; i < *counter; ++i)
 	{
-		returnInt += leftSide;
+		returnInt += *adder;
 	}
 
 	return returnInt;

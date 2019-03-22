@@ -3,7 +3,6 @@
 * Author: Ryan Gillett
 ******************************************************************************/
 #include <iostream>
-#include "primes.h"
 #include "BigInt2.h"
 
 using namespace std;

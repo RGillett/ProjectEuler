@@ -60,6 +60,7 @@ public:
     BigInt& reverseNumber();
     bool isPalindrome();
     BigInt digitSum();
+	BigInt digitCount();
 };
 
 /******************************************************************************
@@ -119,7 +120,6 @@ BigInt& BigInt::operator = (long long rightSide)
 ******************************************************************************/
 BigInt& BigInt::operator = (string rightSide)
 {
-	reverse(rightSide.begin(), rightSide.end());
 	integer = rightSide;
 
 	return *this;
@@ -164,44 +164,19 @@ BigInt BigInt::operator ++ (int postfix)
 ******************************************************************************/
 BigInt operator + (const BigInt& leftSide, const BigInt& rightSide)
 {
-	string sum;
-	string shorter;
-	string longer;
+	string sum = "";
 	int carry = 0;
 
-	if (leftSide.integer.size() > rightSide.integer.size())
+	string::const_reverse_iterator lrit = leftSide.integer.rbegin();
+	string::const_reverse_iterator rrit = rightSide.integer.rbegin();
+	for (/*lrit && rrit*/; lrit < leftSide.integer.rend() || rrit < rightSide.integer.rend() || carry > 0; ++lrit, ++rrit)
 	{
-		shorter = rightSide.integer;
-		longer  = leftSide.integer;
+		int digitSum = (lrit < leftSide.integer.rend() ? *lrit - '0' : 0) + (rrit < rightSide.integer.rend() ? *rrit - '0' : 0) + carry;
+		carry = digitSum / 10;
+		digitSum %= 10;
+		sum = to_string(digitSum) + sum;
 	}
-	else
-	{
-		longer = rightSide.integer;
-		shorter  = leftSide.integer;
-	}
-
-	for (int i = 0; i < longer.size(); i++)
-	{
-		if (i < shorter.size())
-		{
-			short tempSum = (longer[i] - '0') + (shorter[i] - '0') + carry;
-			carry = tempSum / 10;
-			tempSum %= 10;
-			sum += to_string(tempSum);
-		}
-		else
-		{
-			short tempSum = (longer[i] - '0') + carry;
-			carry = tempSum / 10;
-			tempSum %= 10;
-			sum += to_string(tempSum);
-		}
-	}
-
-	sum += (carry != 0 ? to_string(carry) : "");
-
-	reverse(sum.begin(), sum.end());
-
+	
 	return BigInt(sum);
 }
 
@@ -218,7 +193,7 @@ template <typename T> BigInt operator + (const T& leftSide, const T& rightSide)
 ******************************************************************************/
 BigInt operator * (const BigInt& leftSide, const BigInt& rightSide)
 {
-	BigInt returnInt(0);
+	BigInt returnInt = 0;
 	const BigInt* counter = (rightSide < leftSide ? &rightSide : &leftSide);
 	const BigInt* adder   = (rightSide > leftSide ? &rightSide : &leftSide);
 
@@ -243,11 +218,13 @@ template <typename T> BigInt operator * (const T& leftSide, const T& rightSide)
 ******************************************************************************/
 BigInt operator ^ (const BigInt& leftSide, const BigInt& rightSide)
 {
-    BigInt returnInt(leftSide);
+	const BigInt* counter    = (rightSide < leftSide ? &rightSide : &leftSide);
+	const BigInt* multiplier = (rightSide > leftSide ? &rightSide : &leftSide);
+    BigInt returnInt = *multiplier;
 
-	for (BigInt i = 1; i < rightSide; ++i)
+	for (BigInt i = 1; i < *counter; ++i)
 	{
-		returnInt *= leftSide;
+		returnInt *= *multiplier;
 	}
 
 	return returnInt;
@@ -272,7 +249,7 @@ bool operator < (const BigInt& leftSide, const BigInt& rightSide)
 	}
 	if (leftSide.integer.size() == rightSide.integer.size())
 	{
-		for (int i = leftSide.integer.size() - 1; i >= 0; --i)
+		for (int i = 0; i < leftSide.integer.size(); ++i)
 		{
 			if (leftSide.integer[i] < rightSide.integer[i])
 			{
@@ -317,20 +294,7 @@ bool operator >= (const BigInt& leftSide, const BigInt& rightSide)
 ******************************************************************************/
 bool operator == (const BigInt& leftSide, const BigInt& rightSide)
 {
-	if (leftSide.integer.size() == rightSide.integer.size())
-	{
-		for (int i = leftSide.integer.size() - 1; i >= 0; --i)
-		{
-			if (leftSide.integer[i] != rightSide.integer[i])
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	return false;
+	return leftSide.integer == rightSide.integer;
 }
 
 /******************************************************************************
@@ -344,12 +308,9 @@ bool operator != (const BigInt& leftSide, const BigInt& rightSide)
 /******************************************************************************
 * BigInt: <<
 ******************************************************************************/
-ostream& operator << (ostream& out, const BigInt& displayInt)
+ostream& operator << (ostream& out, const BigInt& outputInt)
 {
-	for (int i = displayInt.integer.size() - 1; i >= 0; --i)
-	{
-		out << displayInt.integer[i];
-	}
+	out << outputInt.integer;
 
 	return out;
 }
@@ -385,4 +346,12 @@ BigInt BigInt::digitSum()
     }
 
 	return sum;
+}
+
+/******************************************************************************
+* BigInt: digitCount ()
+******************************************************************************/
+BigInt BigInt::digitCount()
+{
+	return BigInt(integer.size());
 }

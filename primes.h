@@ -118,14 +118,16 @@ long long int getPrime(int n)
 }
 
 /*******************************************************************************
-* factorize()
-* Returns a vector of the number of repetitions of each prime n
+* primeFactorization()
+* Returns a vector of the number of repetitions of each nth prime.
+* The index of the vector represents the nth-1 prime number
 * e.g. 504 as the parameter will return 2*2*2*3*3*7 as {3,2,0,1}
 * representing 3 factors of the 1st prime: 2, 2 factors of the 2nd prime: 3,
-* 0 factors of the 3rd prime: 5, and 1 factor of the 4th prime: 7
+* 0 factors of the 3rd prime: 5, and 1 factor of the 4th prime: 7.
 * This format requires less memory and allows faster manipulation of the numbers
+* than listing each factor individually.
 *******************************************************************************/
-std::vector<int> factorize(long long int number)
+std::vector<int> primeFactorization(long long int number)
 {
 	std::vector<int> factors;
 
